@@ -1,3 +1,4 @@
+#Ensemble model combining multiple trained models via voting or weighting
 import numpy as np
 import torch
 from codebase.models.base_model import BaseModel

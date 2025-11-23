@@ -1,3 +1,4 @@
+#PyTorch neural network implementations (SimpleCNN, ResNet, Transformer)
 import torch
 import torch.nn as nn
 import torch.optim as optim

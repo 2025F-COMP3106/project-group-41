@@ -1,4 +1,4 @@
-# Abstract base class for all models
+#Abstract base class for all models
 import numpy as np
 import torch
 import torch.nn as nn

@@ -1,3 +1,4 @@
+#Sklearn-based interpretable models (LogisticRegression, RandomForest)
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
