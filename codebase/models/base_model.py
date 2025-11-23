@@ -4,13 +4,14 @@ import torch
 import torch.nn as nn
 import os
 import pickle
+from torch.nn import Module
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 from codebase.utils.helpers import create_batches
 
-class BaseModel:
+class BaseModel(Module):
     """
     Abstract base class, defines interface for all models.
-    (All model implementations)
+    Inherits from nn.Module for PyTorch compatibility.
     """
     
     def __init__(self, config):
@@ -23,6 +24,7 @@ class BaseModel:
         Returns:
             None
         """
+        super().__init__()                                      #call nn.Module init
         self.config = config                                    #store config for later use
         self.model = None                                       #init model 
         self.is_trained = False                                 #set trained false
