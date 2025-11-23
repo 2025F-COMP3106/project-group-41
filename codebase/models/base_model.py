@@ -31,58 +31,6 @@ class BaseModel(Module):
         self.input_shape = config.get('input_shape', None)      #init model attributes
         self.num_classes = config.get('num_classes', 2)
 
-    def train(self, train_data, val_data):
-        """
-        Train model on training data & validate on validation data.
-
-        Parameters:
-            train_data  : (X_train, y_train) tuple where X is features, y is labels
-            val_data    : (X_val, y_val) tuple for validation during training
-
-        Returns:
-            dict        : losses and metrics per epoch
-        """
-
-        #unpack data
-        X_train, y_train = train_data
-        X_val, y_val = val_data
-
-        history = {'train_loss': [], 'val_loss': [], 'train_acc': [], 'val_acc': []}    #init history
-
-        num_epochs = self.config.get('epochs', 100)                                     #get number of epochs
-        batch_size = self.config.get('batch_size', 32)                                  #get batch size 
-        
-        #train loop
-        for epoch in range(num_epochs):
-            epoch_loss = 0                                  #total loss for this epoch
-            num_batches = 0                                 #count batches for averaging
-            
-            #train on mini batches 
-            for batch_X, batch_y in create_batches(X_train, y_train, batch_size):
-                predictions = self.model.forward(batch_X)   #forward pass: input -> model -> predictions
-                loss = compute_loss(predictions, batch_y)   #compute error between predictions & true labels
-                gradients = compute_gradients(loss)         #backward pass: compute how to adjust weights
-                update_weights(gradients)                   #apply weight updates using optimizer
-                epoch_loss += loss                          #accumulate loss for this epoch
-                num_batches += 1                            #increment batch counter
-
-            avg_train_loss = epoch_loss/num_batches         #compute avg train loss across all batches
-
-            #compute train accuracy on full training set
-            train_predictions = self.predict(X_train)       #get predictions for entire training set
-            train_acc = accuracy_score(y_train, train_predictions)  #compare predictions to true labels
-
-            val_metrics = self.evaluate((X_val, y_val))     #evaluate model performance on validation set (once per epoch)
-
-            #store metrics for this epoch
-            history['train_loss'].append(avg_train_loss)            #record average training loss
-            history['val_loss'].append(val_metrics['loss'])         #record validation loss (detect overfitting)
-            history['train_acc'].append(train_acc)                  #record training accuracy
-            history['val_acc'].append(val_metrics['accuracy'])      #record validation accuracy (true performance indicator)
-
-        self.is_trained = True
-        return history
-
     def predict(self, X):
         """
         Make predictions on new data.
@@ -117,39 +65,6 @@ class BaseModel(Module):
             predictions = predictions.numpy()                       #convert back to numpy            
         
         return predictions                                          #return the prediction
-        
-
-    def evaluate(self, test_data):
-        """
-        Evaluate model performance on test data.
-        
-        Parameters:
-            test_data   : features, true labels
-        
-        Returns:
-            dict        : Dictionary of evaluation metrics
-        """
-        X_test, y_test = test_data                              #unpack test data
-        predictions = self.predict(X_test)                      #get predictions through forward pass
-        
-        loss = compute_loss(predictions, y_test)                #compute loss 
-        
-        #compute metrics
-        accuracy = accuracy_score(y_test, predictions)          #accuracy: ratio of correct predictions
-        precision = precision_score(y_test, predictions, average='weighted', zero_division=0)    #precision: TP / (TP + FP), how many predicted positives are correct
-        recall = recall_score(y_test, predictions, average='weighted', zero_division=0)          #recall: TP / (TP + FN),    how many actual positives we found
-        f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0    #F1-score: harmonic mean of precision and recall
-        
-        #put all into metrics dictionary
-        metrics = {
-            'accuracy': accuracy,       #overall correctness
-            'precision': precision,     #positive prediction quality
-            'recall': recall,           #positive detection rate
-            'f1_score': f1,             #balanced precision/recall score
-            'loss': loss                #model error/loss value
-        }
-        
-        return metrics
 
     def save(self, path):
         """
