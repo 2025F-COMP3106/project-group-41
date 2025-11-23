@@ -6,7 +6,7 @@ from .interpretable_models import LogisticRegressionModel, RandomForestModel
 from .ensemble import EnsembleModel
 from .explainability import ModelExplainer
 
-# Factory pattern for creating models
+#Factory pattern for creating models
 def create_model(model_type, config):
     if model_type == 'cnn':
         return SimpleCNN(config)

@@ -61,10 +61,10 @@ class SimpleCNN(BaseModel):
         Forward pass through the network
         
         Parameters:
-            x : input tensor, shape (batch_size, channels, height, width)
+            x       : input tensor, shape (batch_size, channels, height, width)
         
         Returns:
-            output : logits -> each class, shape (batch_size, num_classes)
+            output  : logits -> each class, shape (batch_size, num_classes)
         """
         #convolutional block 1
         x = self.conv1(x)           #1st convolution
@@ -95,15 +95,15 @@ class SimpleCNN(BaseModel):
         Train CNN using pytorch training loop
         
         Parameters:
-            train_data : (X_train, y_train) tuple
-            val_data : (X_val, y_val) tuple
+            train_data  : (X_train, y_train) tuple
+            val_data    : (X_val, y_val) tuple
         
         Returns:
-            history : dict with training metrics
+            history     : dict with training metrics
         """
         
         X_train, y_train = train_data                           #unpack train data
-        X_val, y_val = val_data                                 #unpack val data
+        X_val, y_val = val_data                                 #unpack validation data
         
         history = {'train_loss': [], 'val_loss': [], 'train_acc': [], 'val_acc': []}    #init history
         
@@ -211,10 +211,10 @@ class ResNetModel(BaseModel):
         Forward pass through resenet
         
         Parameters:
-            x : input tensor, shape (batch_size, channels, height, width)
+            x       : input tensor, shape (batch_size, channels, height, width)
         
         Returns:
-            output : logits for each class, shape (batch_size, num_classes)
+            output  : logits for each class, shape (batch_size, num_classes)
         """
         return self.resnet(x)       #resnet handles forward pass (all residual blocks)
 
@@ -282,10 +282,10 @@ class TransformerModel(BaseModel):
         Forward pass through vision transformer
         
         Parameters:
-            x : input tensor, shape (batch_size, channels, height, width)
+            x       : input tensor, shape (batch_size, channels, height, width)
         
         Returns:
-            output : logits for each class, shape (batch_size, num_classes)
+            output  : logits for each class, shape (batch_size, num_classes)
         """
         batch_size = x.shape[0]                                 #batch size
         
