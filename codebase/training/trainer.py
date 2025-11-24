@@ -1,6 +1,4 @@
 # Training loop and logic
-<<<<<<< HEAD
-# training/trainer.py
 
 import torch
 import numpy as np
@@ -221,6 +219,3 @@ class Trainer:
                 all_probs.append(probs.cpu().numpy())
 
         return np.concatenate(all_probs, axis=0)
-
-=======
->>>>>>> 7fddf3a7dd8fe821046b3a495f4ba397b587e9d2

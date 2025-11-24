@@ -1,5 +1,5 @@
 # Training callbacks (early stopping, model checkpointing, logging)
-<<<<<<< HEAD
+
 import os
 import torch
 from torch.nn import Module
@@ -50,5 +50,3 @@ class ModelCheckpoint:
             os.makedirs(os.path.dirname(self.save_path), exist_ok=True)
             torch.save(model.state_dict(), self.save_path)
             print(f"[Checkpoint] Saved improved model → {self.save_path}")
-=======
->>>>>>> 7fddf3a7dd8fe821046b3a495f4ba397b587e9d2
