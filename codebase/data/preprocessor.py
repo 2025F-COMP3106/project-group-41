@@ -1,24 +1,22 @@
 # Preprocessing pipeline for medical images
+# 
+# Purpose: Prepares raw images for the neural network by standardizing format
+# (resize to 224x224, convert to tensor, normalize). This ensures all images
+# are in the same format the model expects, regardless of original size/format.
 
 import torch
-# torchvision.transforms: A collection of image transformation functions for PyTorch
-# Why we import it:
-#   - Provides ready-made image transformations (resize, normalize, tensor conversion, etc.)
-#   - Handles conversion between PIL Images and PyTorch tensors automatically
-#   - Allows us to chain multiple transforms together using Compose()
-#   - Essential for standardizing images before feeding them to neural networks
-#   - Without this, we'd have to manually write all image preprocessing code
 from torchvision import transforms
 
+# torchvision.transforms: Image transformation functions for PyTorch
+# Provides: resize, normalize, tensor conversion
 
 def get_preprocessing_transforms():
     """
     Returns standard preprocessing transforms for medical images.
-    Resizes images to 224x224 (standard for ResNet), converts to tensor,
-    and normalizes using ImageNet statistics.
+    Resizes to 224x224, converts to tensor, normalizes using ImageNet stats.
     
     Returns:
-        torchvision.transforms.Compose: Composition of preprocessing transforms
+        torchvision.transforms.Compose: Preprocessing transforms
     """
     return transforms.Compose([
         transforms.Resize((224, 224)),
@@ -28,4 +26,3 @@ def get_preprocessing_transforms():
             std=[0.229, 0.224, 0.225]
         )
     ])
-
