@@ -52,7 +52,8 @@ class SimpleCNN(BaseModel):
         
         self.fc2 = nn.Linear(256, num_classes)                          #output layer (class logits)
 
-        self.model = self                                               #self = model(compatibility)
+        #SimpleCNN IS the model (inherits from nn.Module via BaseModel)
+        #No need for self.model = self (causes recursion issues)
 
         self.criterion = nn.CrossEntropyLoss()                          #loss function -> classification(CE loss)
         self.optimizer = optim.Adam(self.parameters(), lr=config.get('learning_rate', 0.001))  #optimizer
@@ -91,9 +92,10 @@ class SimpleCNN(BaseModel):
         
         return x                    #class scores (logits)
     
-    def train(self, train_data, val_data):
+    def fit(self, train_data, val_data):
         """
-        Train CNN using pytorch training loop
+        Train CNN using pytorch training loop (standalone training without Trainer class)
+        Note: Use Trainer.fit() for full training with callbacks. This is for direct training.
         
         Parameters:
             train_data  : (X_train, y_train) tuple
@@ -112,7 +114,7 @@ class SimpleCNN(BaseModel):
         batch_size = self.config.get('batch_size', 32)          #batch size
         
         for epoch in range(num_epochs):
-            self.model.train()                                  #mode = training mode (allows dropout/batch norm)
+            super().train()                                     #mode = training mode (allows dropout/batch norm)
             epoch_loss = 0                                      #total loss for this epoch
             num_batches = 0                                     #count batches for averaging
             
@@ -136,7 +138,7 @@ class SimpleCNN(BaseModel):
             avg_train_loss = epoch_loss / num_batches           #compute avg train loss
             
             #compute train accuracy (full train set)
-            self.model.eval()                                   #mode = evaluation mode (!dropout)
+            super().eval()                                      #mode = evaluation mode (!dropout)
 
             with torch.no_grad():                               #!gradient computation (saves memory)
 
@@ -272,7 +274,8 @@ class TransformerModel(BaseModel):
         
         self.dropout = nn.Dropout(dropout)                      #dropout
         
-        self.model = self                                       #store as model (base class compatibility)
+        #TransformerModel IS the model (inherits from nn.Module via BaseModel)
+        #No need for self.model = self (causes recursion issues)
         
         # training components
         self.criterion = nn.CrossEntropyLoss()                  #loss function
