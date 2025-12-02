@@ -1,0 +1,28 @@
+#Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+#Virtual environment
+.venv/
+venv/
+ENV/
+
+#Model checkpoints (large binary files)
+checkpoints/*.pth
+*.pth
+
+#IDE
+.vscode/
+.idea/
+
+#OS files
+.DS_Store
+Thumbs.db
+
+#Jupyter
+.ipynb_checkpoints/
+
+#Logs
+*.log
