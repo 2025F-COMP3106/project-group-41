@@ -7,5 +7,4 @@ __all__ = [
     'Trainer',
     'EarlyStopping',
     'ModelCheckpoint',
-    'TrainingConfig',
 ]
