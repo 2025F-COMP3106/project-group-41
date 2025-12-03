@@ -16,6 +16,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from codebase.config import TrainingConfig
 from codebase.training import Trainer
 from codebase.models import SimpleCNN, ResNetModel
+from codebase.data.dataset_loader import get_dataloaders
 
 
 def main():
@@ -50,6 +51,7 @@ def main():
     print(f"Learning rate: {config.learning_rate}")
     print(f"Weight decay: {config.weight_decay}")
 
+<<<<<<< HEAD
     # ==========================================================
     # OPTIMIZATION 3: Create synthetic data with PATTERNS
     # Instead of pure random noise, create data with learnable structure
@@ -103,6 +105,17 @@ def main():
     X_train, y_train = create_patterned_data(n_train)
     X_val, y_val = create_patterned_data(n_val)
     X_test, y_test = create_patterned_data(n_test)
+=======
+    # 2. Generate synthetic data (since we don't have enough real images yet)
+    ''''
+    print("\nGenerating synthetic training data...")
+    X_train = torch.randn(64, 3, 224, 224)  # 64 fake 224x224 RGB images
+    y_train = torch.randint(0, 2, (64,))    # Random labels (0=benign, 1=malignant)
+    X_val = torch.randn(16, 3, 224, 224)    # 16 validation images
+    y_val = torch.randint(0, 2, (16,))
+    X_test = torch.randn(16, 3, 224, 224)   # 16 test images
+    y_test = torch.randint(0, 2, (16,))
+>>>>>>> 04d5839 (Added real HAM1000 dataset, changed main to stop using synthetic data)
 
     train_loader = DataLoader(TensorDataset(X_train, y_train), batch_size=config.batch_size, shuffle=True)
     val_loader = DataLoader(TensorDataset(X_val, y_val), batch_size=config.batch_size)
@@ -111,6 +124,11 @@ def main():
     print(f"Train samples: {len(X_train)} (balanced classes)")
     print(f"Val samples: {len(X_val)}")
     print(f"Test samples: {len(X_test)}")
+    '''
+
+    # using real data
+    print("\nLoading real HAM10000 subset...")
+    train_loader, val_loader, test_loader = get_dataloaders(config)
 
     # ==========================================================
     # OPTIMIZATION 1: Pretrained ResNet18 (transfer learning)
