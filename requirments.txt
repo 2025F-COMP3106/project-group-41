@@ -1,8 +1,10 @@
+numpy
 pandas
 torch
-sklearn
 torchvision
 scikit-learn
 matplotlib
-pandas
 lime
+shap
+opencv-python
+Pillow
