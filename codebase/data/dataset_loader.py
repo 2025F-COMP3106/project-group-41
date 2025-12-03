@@ -139,8 +139,8 @@ def split_dataset(
 
 def get_dataloaders(
     config, 
-    csv_path: str = 'data/labels.csv', 
-    image_dir: Optional[str] = None
+    csv_path: str = 'codebase/data/labels.csv', 
+    image_dir: Optional[str] = 'codebase/data'
 ) -> Tuple[DataLoader, DataLoader, DataLoader]:
     """
     Create PyTorch DataLoaders for train/val/test sets.
