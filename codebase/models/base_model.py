@@ -6,7 +6,7 @@ import os
 import pickle
 from torch.nn import Module
 from sklearn.metrics import accuracy_score, precision_score, recall_score
-from codebase.utils.helpers import create_batches
+from codebase.utils import create_batches
 
 class BaseModel(Module):
     """
