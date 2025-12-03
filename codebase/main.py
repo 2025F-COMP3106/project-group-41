@@ -13,8 +13,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 from codebase.config import TrainingConfig
-from codebase.training.trainer import Trainer
-from codebase.models.neural_networks import SimpleCNN, ResNetModel
+from codebase.training import Trainer
+from codebase.models import SimpleCNN, ResNetModel
 
 
 def main():
