@@ -106,7 +106,12 @@ This project implements an AI-powered skin cancer detection system that:
    python codebase/main.py
    ```
 
-3. **View results**
+3. **Prediction**
+   ```bash
+   python -m codebase.predict <path_to_image_file>
+   ```
+
+4. **View results**
    - Training progress will be displayed in the console
    - Best model will be saved to `checkpoints/best_model.pth`
    - Evaluation metrics will be printed at the end

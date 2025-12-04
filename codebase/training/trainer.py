@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 
 from codebase.training.callbacks import EarlyStopping, ModelCheckpoint
 from codebase.config import TrainingConfig
-from codebase.evaluation.metrics import calculate_metrics
+from codebase.evaluation import calculate_metrics
 
 
 class Trainer:

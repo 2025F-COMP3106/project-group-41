@@ -6,7 +6,7 @@ import numpy as np
 from sklearn.metrics import accuracy_score
 from torchvision import models                          
 from codebase.models.base_model import BaseModel
-from codebase.utils.helpers import create_batches
+from codebase.utils import create_batches
 
 class SimpleCNN(BaseModel):
     def __init__(self, config):

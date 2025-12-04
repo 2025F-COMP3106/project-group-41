@@ -8,7 +8,7 @@ from PIL import Image
 from sklearn.model_selection import train_test_split
 from typing import Optional, Tuple
 
-from codebase.data.augmentation import get_train_transforms, get_val_test_transforms
+from codebase.utils import get_train_transforms, get_val_test_transforms
 
 
 # Constants
@@ -106,41 +106,70 @@ def split_dataset(
     random_state: int = 42
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
-    Split dataset into train/val/test with stratification (maintains class balance).
-    
-    Returns:
-        (train_df, val_df, test_df)
+    Split dataset into train/val/test.
+    Uses stratified splitting when possible.
+    Falls back to random splits if dataset is too small.
     """
+
+    # ---- 1. Validate ratios ----
     if abs(train_ratio + val_ratio + test_ratio - 1.0) > 1e-6:
-        raise ValueError(f"Ratios must sum to 1.0, got {train_ratio + val_ratio + test_ratio}")
-    
-    if len(df) < 3:
-        raise ValueError(f"Dataset too small: {len(df)} samples. Need at least 3.")
-    
-    min_class_count = df['label'].value_counts().min()
-    if min_class_count < 2:
-        raise ValueError(f"Cannot stratify: one class has only {min_class_count} sample(s)")
-    
-    # Split train from (val + test)
+        raise ValueError("train_ratio + val_ratio + test_ratio must sum to 1.0")
+
+    total = len(df)
+
+    if total < 3:
+        raise ValueError(f"Dataset too small: {total} samples. Need >= 3.")
+
+    labels = df["label"]
+    min_class = labels.value_counts().min()
+
+    # ---- 2. Decide whether stratification is possible ----
+    can_stratify = (min_class >= 2) and (total >= 10)
+
+    if not can_stratify:
+        print("[Warning] Dataset too small for stratification. Using random split.")
+        stratify_full = None
+    else:
+        stratify_full = labels
+
+    # ---- 3. First split: train vs temp (val+test) ----
+    temp_ratio = val_ratio + test_ratio
+
     train_df, temp_df = train_test_split(
-        df, test_size=(val_ratio + test_ratio),
-        stratify=df['label'], random_state=random_state
+        df,
+        test_size=temp_ratio,
+        stratify=stratify_full,
+        random_state=random_state,
     )
-    
-    # Split val from test
-    val_size = val_ratio / (val_ratio + test_ratio)
+
+    # ---- 4. Second split: temp -> val vs test ----
+    if can_stratify:
+        temp_labels = temp_df["label"]
+        min_temp = temp_labels.value_counts().min()
+
+        stratify_temp = temp_labels if min_temp >= 2 else None
+        if stratify_temp is None:
+            print("[Warning] Not enough class samples in temp for stratification.")
+    else:
+        stratify_temp = None
+
+    # Relative split inside temp (val vs test)
+    relative_test_ratio = test_ratio / (val_ratio + test_ratio)
+
     val_df, test_df = train_test_split(
-        temp_df, test_size=(1 - val_size),
-        stratify=temp_df['label'], random_state=random_state
+        temp_df,
+        test_size=relative_test_ratio,
+        stratify=stratify_temp,
+        random_state=random_state,
     )
-    
+
     return train_df, val_df, test_df
 
 
 def get_dataloaders(
     config, 
-    csv_path: str = 'data/labels.csv', 
-    image_dir: Optional[str] = None
+    csv_path: str = 'codebase/data/labels.csv', 
+    image_dir: Optional[str] = 'codebase/data/images'
 ) -> Tuple[DataLoader, DataLoader, DataLoader]:
     """
     Create PyTorch DataLoaders for train/val/test sets.
@@ -185,20 +214,20 @@ def get_dataloaders(
     # Create datasets
     print(f"\nCreating datasets...")
     train_dataset = SkinLesionDataset(df=train_df, image_dir=image_dir, transform=get_train_transforms())
-    val_dataset = SkinLesionDataset(df=val_df, image_dir=image_dir, transform=get_val_test_transforms())
-    test_dataset = SkinLesionDataset(df=test_df, image_dir=image_dir, transform=get_val_test_transforms())
+    val_dataset   = SkinLesionDataset(df=val_df,   image_dir=image_dir, transform=get_val_test_transforms())
+    test_dataset  = SkinLesionDataset(df=test_df,  image_dir=image_dir, transform=get_val_test_transforms())
     print(f"✓ Datasets created")
     
     # Create DataLoaders
-    num_workers = 0 if os.name == 'nt' else 2
+    num_workers = 0
     pin_memory = torch.cuda.is_available()
     
     train_loader = DataLoader(train_dataset, batch_size=config.batch_size, shuffle=True, 
-                             num_workers=num_workers, pin_memory=pin_memory)
+                             num_workers=0, pin_memory=pin_memory)
     val_loader = DataLoader(val_dataset, batch_size=config.batch_size, shuffle=False,
-                           num_workers=num_workers, pin_memory=pin_memory)
+                           num_workers=0, pin_memory=pin_memory)
     test_loader = DataLoader(test_dataset, batch_size=config.batch_size, shuffle=False,
-                            num_workers=num_workers, pin_memory=pin_memory)
+                            num_workers=0, pin_memory=pin_memory)
     
     print(f"✓ DataLoaders created (batch_size={config.batch_size}, workers={num_workers})")
     print(f"{'='*60}\n")
