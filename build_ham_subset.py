@@ -49,8 +49,8 @@ def main():
     # Build filename column (images are named <image_id>.jpg)
     df["filename"] = df["image_id"].astype(str) + ".jpg"
 
-    benign_df = df[df["bm"] == "benign"].head(N_BENIGN)
-    malignant_df = df[df["bm"] == "malignant"].head(N_MALIGNANT)
+    benign_df = df[df["bm"] == "benign"].sample(n=N_BENIGN)
+    malignant_df = df[df["bm"] == "malignant"].sample(n=N_MALIGNANT)
 
     print(f"Selected {len(benign_df)} benign and {len(malignant_df)} malignant examples.")
 

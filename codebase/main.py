@@ -10,7 +10,7 @@ import os
 # Add project root to path so imports work when running directly
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from codebase.config import TrainingConfig
+from codebase.config import TrainingConfig, ModelConfig
 from codebase.training import Trainer
 from codebase.models import ResNetModel
 from codebase.data.dataset_loader import get_dataloaders
@@ -21,15 +21,8 @@ def main():
     print("SKIN CANCER DETECTION - NEURAL NETWORK TRAINING")
     print("="*60)
 
-    # Training configuration
-    config = TrainingConfig(
-        num_epochs=30,
-        learning_rate=1e-4,      # Lower LR for pretrained model
-        batch_size=16,           # Smaller batch for more updates
-        weight_decay=1e-3,       # Regularization to prevent overfitting
-        checkpoint_path="checkpoints/best_model.pth",
-        early_stopping_patience=7
-    )
+    # Training configuration (uses defaults from config.py)
+    config = TrainingConfig()
     print(f"\nDevice: {config.device}")
     print(f"Epochs: {config.num_epochs}")
     print(f"Batch size: {config.batch_size}")
@@ -38,17 +31,10 @@ def main():
     print("\nLoading HAM10000 dataset...")
     train_loader, val_loader, test_loader = get_dataloaders(config)
 
-    # Create model - ResNet18 with pretrained ImageNet weights
-    model_config = {
-        "num_classes": 2,
-        "input_shape": (3, 224, 224),
-        "task": "classification",
-        "model_type": "pytorch",
-        "pretrained": True,
-        "resnet_version": "resnet18"
-    }
+    # Create model - ResNet18 with pretrained ImageNet weights (uses defaults from config.py)
+    model_config = ModelConfig()
     
-    model = ResNetModel(model_config)
+    model = ResNetModel(model_config.to_dict())
     print(f"\nModel: {model.__class__.__name__} (pretrained=True)")
 
     # Initialize Trainer
