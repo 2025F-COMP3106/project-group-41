@@ -8,8 +8,7 @@ from PIL import Image
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from codebase.models import ResNetModel
-from codebase.data.dataset_loader import get_val_test_transforms
-from codebase.config import TrainingConfig
+from codebase.utils import get_val_test_transforms
 
 
 LABEL_MAP = {0: "BENIGN", 1: "MALIGNANT"}
@@ -24,12 +23,12 @@ def load_model(checkpoint_path="checkpoints/best_model.pth"):
         "input_shape": (3, 224, 224),
         "task": "classification",
         "model_type": "pytorch",
-        "pretrained": False,       # Already trained on dataset
+        "pretrained": False,  # Don't load pretrained weights, we'll load our trained weights
         "resnet_version": "resnet18"
     }
 
     model = ResNetModel(model_config)
-    state_dict = torch.load(checkpoint_path, map_location="cpu")
+    state_dict = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
     model.load_state_dict(state_dict)
     model.eval()
 
@@ -58,8 +57,6 @@ def predict(image_path):
     if not os.path.exists(image_path):
         print(f"[ERROR] File not found: {image_path}")
         return
-
-    config = TrainingConfig()
 
     # Load model & image
     model = load_model()

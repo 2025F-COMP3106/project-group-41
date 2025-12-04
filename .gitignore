@@ -31,6 +31,11 @@ codebase/data/images/
 codebase/data/HAM10000_images_part_1/
 codebase/data/HAM10000_images_part_2/
 codebase/data/*.csv
+
+#Database folder (full HAM10000 dataset)
+database/
+
+#Image files
 *.jpg
 *.jpeg
 *.png

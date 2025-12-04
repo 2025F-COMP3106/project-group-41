@@ -5,10 +5,10 @@ import pandas as pd
 
 PROJECT_ROOT = os.path.dirname(__file__)
 
-METADATA_CSV = os.path.join(PROJECT_ROOT, "codebase", "data", "HAM10000_metadata.csv")
+METADATA_CSV = os.path.join(PROJECT_ROOT, "database", "archive", "HAM10000_metadata.csv")
 IMAGES_DIRS = [
-    os.path.join(PROJECT_ROOT, "codebase", "data", "HAM10000_images_part_1"),
-    os.path.join(PROJECT_ROOT, "codebase", "data", "HAM10000_images_part_2"),
+    os.path.join(PROJECT_ROOT, "database", "archive", "HAM10000_images_part_1"),
+    os.path.join(PROJECT_ROOT, "database", "archive", "HAM10000_images_part_2"),
 ]
 
 OUTPUT_IMAGE_DIR = os.path.join(PROJECT_ROOT, "codebase", "data", "images")
