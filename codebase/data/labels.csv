@@ -1,4 +1,8 @@
 filepath,label
+data/images/cancerous- melanoma1.jpeg,1
+data/images/cancerous-saquinoma.jpeg,1
+data/images/keratosis1.jpg,0
+data/images/lipoma1.jpg,0
 ISIC_0027239.jpg,0
 ISIC_0032166.jpg,0
 ISIC_0027342.jpg,0
@@ -199,3 +203,4 @@ ISIC_0025301.jpg,1
 ISIC_0029271.jpg,1
 ISIC_0025630.jpg,1
 ISIC_0030119.jpg,1
+

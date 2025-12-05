@@ -107,7 +107,9 @@ This project implements an AI-powered skin cancer detection system that:
    ```
 
 3. **Prediction**
+   ```bash
    python -m codebase.predict <path_to_image_file>
+   ```
 
 4. **View results**
    - Training progress will be displayed in the console
