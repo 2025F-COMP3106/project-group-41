@@ -1,6 +1,7 @@
 #PyTorch neural network implementations (ResNet)
 import torch.nn as nn
-from torchvision import models                          
+from torchvision import models
+from torchvision.models import ResNet18_Weights, ResNet34_Weights, ResNet50_Weights
 from codebase.models.base_model import BaseModel
 
 
@@ -22,15 +23,19 @@ class ResNetModel(BaseModel):
         pretrained = config.get('pretrained', True)                 #whether to use pretrained weights
         resnet_version = config.get('resnet_version', 'resnet18')   #resnet version (resnet18, resnet50, etc)
         
-        #load pretrained ResNet model
+        #load pretrained ResNet model using new weights API
         if resnet_version == 'resnet18':
-            self.resnet = models.resnet18(pretrained=pretrained)    #resnet-18 (11M param, fastest)
+            weights = ResNet18_Weights.IMAGENET1K_V1 if pretrained else None
+            self.resnet = models.resnet18(weights=weights)    #resnet-18 (11M param, fastest)
         elif resnet_version == 'resnet34':
-            self.resnet = models.resnet34(pretrained=pretrained)    #resnet-34 (21M param)
+            weights = ResNet34_Weights.IMAGENET1K_V1 if pretrained else None
+            self.resnet = models.resnet34(weights=weights)    #resnet-34 (21M param)
         elif resnet_version == 'resnet50':
-            self.resnet = models.resnet50(pretrained=pretrained)    #resnet-50 (25M param, good balance)
+            weights = ResNet50_Weights.IMAGENET1K_V1 if pretrained else None
+            self.resnet = models.resnet50(weights=weights)    #resnet-50 (25M param, good balance)
         else:
-            self.resnet = models.resnet18(pretrained=pretrained)    #default: resnet-18
+            weights = ResNet18_Weights.IMAGENET1K_V1 if pretrained else None
+            self.resnet = models.resnet18(weights=weights)    #default: resnet-18
         
         #num of feat from last layer
         num_features = self.resnet.fc.in_features               #original resnet outputs 1000 classes (imagenet)
