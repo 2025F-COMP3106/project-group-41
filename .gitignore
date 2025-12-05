@@ -39,3 +39,7 @@ database/
 *.jpg
 *.jpeg
 *.png
+
+#Allow test_images folder for presentation
+!test_images/
+!test_images/*.jpg

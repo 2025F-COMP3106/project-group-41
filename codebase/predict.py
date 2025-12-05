@@ -1,3 +1,10 @@
+"""
+Run prediction on a skin lesion image.
+
+Usage (from project root directory):
+    python -m codebase.predict test_images/(IMAGE NAME).jpg
+"""
+
 import sys
 import os
 import torch
