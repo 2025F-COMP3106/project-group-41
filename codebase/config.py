@@ -40,16 +40,10 @@ class ModelConfig:
     def __init__(
         self,
         num_classes: int = 2,
-        input_shape: tuple = (3, 224, 224),
-        task: str = "classification",
-        model_type: str = "pytorch",
         pretrained: bool = True,
         resnet_version: str = "resnet18",
     ):
         self.num_classes = num_classes
-        self.input_shape = input_shape
-        self.task = task
-        self.model_type = model_type
         self.pretrained = pretrained
         self.resnet_version = resnet_version
 
@@ -57,9 +51,6 @@ class ModelConfig:
         """Convert config to dictionary for model initialization."""
         return {
             "num_classes": self.num_classes,
-            "input_shape": self.input_shape,
-            "task": self.task,
-            "model_type": self.model_type,
             "pretrained": self.pretrained,
             "resnet_version": self.resnet_version,
         }

@@ -20,9 +20,6 @@ def load_model(checkpoint_path="checkpoints/best_model.pth"):
 
     model_config = {
         "num_classes": 2,
-        "input_shape": (3, 224, 224),
-        "task": "classification",
-        "model_type": "pytorch",
         "pretrained": False,  # Don't load pretrained weights, we'll load our trained weights
         "resnet_version": "resnet18"
     }

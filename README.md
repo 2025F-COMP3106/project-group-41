@@ -23,28 +23,28 @@ This project demonstrates how multiple artificial intelligence concepts—includ
 
 This project implements an AI-powered skin cancer detection system that:
 
-- **Analyzes skin lesion images** using deep learning models (ResNet, CNN, Transformers)
+- **Analyzes skin lesion images** using a deep learning model (ResNet18)
 - **Classifies lesions** as benign or malignant with high accuracy
-- **Uses transfer learning** from ImageNet-pretrained models for better performance
+- **Uses transfer learning** from ImageNet-pretrained weights for better performance
 - **Implements data augmentation** to improve model generalization
-- **Provides comprehensive evaluation** with metrics, visualizations, and cross-validation
-- **Supports multiple datasets** (ISIC Archive, HAM10000) through flexible CSV-based loading
+- **Provides evaluation metrics** including accuracy, precision, recall, and F1 score
+- **Uses HAM10000 dataset** through flexible CSV-based loading
 
 ### Technologies Used
 
 - **PyTorch**: Deep learning framework for neural network implementation
-- **torchvision**: Image transformations and pretrained models (ResNet)
-- **scikit-learn**: Machine learning utilities and metrics
+- **torchvision**: Image transformations and pretrained ResNet model
+- **scikit-learn**: Metrics calculation (accuracy, precision, recall, F1)
 - **pandas**: Data manipulation for CSV-based dataset management
-- **matplotlib/seaborn**: Visualization of results and model performance
+- **Pillow**: Image loading and processing
 
 ### Key Features
-- **Flexible Data Loading**: CSV-based system that can aggregate multiple medical imaging datasets
+- **Flexible Data Loading**: CSV-based system for loading skin lesion images
 - **Data Augmentation**: Random flips, rotations, color jitter, and affine transformations
-- **Multiple Model Architectures**: SimpleCNN, ResNet (18/34/50), and Vision Transformer
-- **Comprehensive Evaluation**: Metrics, confusion matrices, ROC curves, learning curves
-- **Cross-Validation**: K-fold, stratified k-fold, and leave-one-out validation
-- **Model Explainability**: LIME integration for understanding model decisions
+- **Transfer Learning**: ResNet18 pretrained on ImageNet, fine-tuned for skin lesions
+- **Early Stopping**: Prevents overfitting by monitoring validation loss
+- **Model Checkpointing**: Saves best model during training
+- **Comprehensive Metrics**: Accuracy, precision, recall, F1 score, and confusion matrix
 
 ---
 
@@ -204,11 +204,9 @@ config = TrainingConfig(
 )
 ```
 
-### Available Models
+### Model Architecture
 
-1. **SimpleCNN**: Custom convolutional neural network
-2. **ResNet**: Pretrained ResNet (18, 34, or 50 layers)
-3. **TransformerModel**: Vision Transformer architecture
+**ResNet18**: Pretrained on ImageNet with a custom classification head for binary skin lesion classification (benign vs malignant)
 
 ### Training Process
 
@@ -231,35 +229,12 @@ The system calculates:
 - **Recall**: Of actual positives, how many were found
 - **F1 Score**: Harmonic mean of precision and recall
 
-### Visualizations
+### Output
 
-Generate plots using the evaluation module:
-
-```python
-from codebase.evaluation import (
-    plot_learning_curves,
-    plot_confusion_matrix,
-    plot_roc_curve
-)
-
-# Plot training history
-plot_learning_curves(history, save_path='results/learning_curves.png')
-
-# Plot confusion matrix
-plot_confusion_matrix(y_true, y_pred, save_path='results/confusion_matrix.png')
-
-# Plot ROC curve
-plot_roc_curve(y_true, y_pred_proba, save_path='results/roc_curve.png')
-```
-
-### Cross-Validation
-
-```python
-from codebase.evaluation import stratified_k_fold_cross_validation
-
-results = stratified_k_fold_cross_validation(model, X, y, k=5)
-print(f"Mean Accuracy: {results['mean_accuracy']:.3f}")
-```
+After training, the system displays:
+- Training and validation accuracy per epoch
+- Test set metrics (accuracy, precision, recall, F1)
+- Confusion matrix showing true/false positives and negatives
 
 ---
 
@@ -269,40 +244,42 @@ print(f"Mean Accuracy: {results['mean_accuracy']:.3f}")
 3106-Final/
 ├── codebase/
 │   ├── data/                    # Data handling module
-│   │   ├── dataset_loader.py    # CSV-based data loading
-│   │   ├── augmentation.py       # Data augmentation transforms
-│   │   ├── preprocessor.py      # Image preprocessing
-│   │   └── labels.csv           # Dataset labels
+│   │   ├── dataset_loader.py    # CSV-based data loading and augmentation
+│   │   ├── labels.csv           # Dataset labels
+│   │   └── images/              # Skin lesion images
 │   │
 │   ├── models/                  # Model architectures
-│   │   ├── neural_networks.py   # CNN, ResNet, Transformer
-│   │   ├── interpretable_models.py  # Logistic Regression, Random Forest
-│   │   ├── ensemble.py          # Ensemble methods
-│   │   └── explainability.py    # Model interpretation (LIME)
+│   │   ├── base_model.py        # Abstract base class
+│   │   └── neural_networks.py   # ResNet18 implementation
 │   │
 │   ├── training/                # Training utilities
 │   │   ├── trainer.py           # Main training loop
-│   │   └── callbacks.py         # Early stopping, checkpoints
+│   │   └── callbacks.py         # Early stopping, model checkpoints
 │   │
-│   ├── evaluation/              # Evaluation and visualization
-│   │   ├── metrics.py           # Metric calculations
-│   │   ├── validation.py        # Cross-validation strategies
-│   │   └── visualization.py     # Plotting functions
+│   ├── evaluation/              # Evaluation module
+│   │   └── metrics.py           # Metric calculations
 │   │
-│   ├── config.py                # Training configuration
-│   └── main.py                  # Entry point
+│   ├── utils/                   # Utility functions
+│   │   └── helpers.py           # Image transforms
+│   │
+│   ├── config.py                # Training and model configuration
+│   ├── main.py                  # Training entry point
+│   └── predict.py               # Single image prediction
 │
-├── documents/                   # Project documentation
-├── requirments.txt              # Python dependencies
+├── checkpoints/                 # Saved model weights
+├── database/                    # Original HAM10000 dataset
+├── build_ham_subset.py          # Script to create dataset subset
+├── requirements.txt             # Python dependencies
 └── README.md                    # This file
 ```
 
 ### Module Responsibilities
 
-- **Data Module**: Handles dataset loading, preprocessing, and augmentation
-- **Models Module**: Implements various neural network architectures
-- **Training Module**: Manages training loop, optimization, and callbacks
-- **Evaluation Module**: Provides metrics, validation, and visualization tools
+- **Data Module**: Dataset loading, train/val/test splitting, and augmentation
+- **Models Module**: ResNet18 with custom classification head
+- **Training Module**: Training loop with early stopping and checkpointing
+- **Evaluation Module**: Calculates accuracy, precision, recall, F1, and confusion matrix
+- **Utils Module**: Image preprocessing transforms
 
 ---
 
@@ -319,7 +296,6 @@ print(f"Mean Accuracy: {results['mean_accuracy']:.3f}")
 
 - **PyTorch**: [https://pytorch.org/](https://pytorch.org/)
 - **scikit-learn**: [https://scikit-learn.org/](https://scikit-learn.org/)
-- **LIME**: [https://github.com/marcotcr/lime](https://github.com/marcotcr/lime)
 
 ### AI Concepts Implemented
 
@@ -333,8 +309,8 @@ print(f"Mean Accuracy: {results['mean_accuracy']:.3f}")
 
 ## Future Improvements
 
-- [ ] Support for multi-class classification (different cancer types)
-- [ ] Real-time inference API
-- [ ] Web interface for dermatologists
-- [ ] Integration with medical imaging systems
-- [ ] Ensemble of multiple models for improved accuracy
+- [ ] Multi-class classification (different cancer types: melanoma, basal cell carcinoma, etc.)
+- [ ] Visualization of model predictions (Grad-CAM, attention maps)
+- [ ] Web interface for easy image upload and prediction
+- [ ] Larger dataset training for improved generalization
+- [ ] Cross-validation for more robust evaluation

@@ -198,24 +198,3 @@ class Trainer:
         metrics = calculate_metrics(y_true, y_pred)
         print("[Trainer] Test set metrics:", metrics)
         return metrics
-
-    # ---------- Probability outputs for Bayes / rule-based logic ----------
-
-    def predict_proba(self, loader: DataLoader):
-        """
-        Return class probabilities for each sample in the loader.
-        Useful for:
-          - Bayesian post-processing
-          - rule-based 'low confidence' flags
-        """
-        self.model.eval()
-        all_probs = []
-
-        with torch.no_grad():
-            for inputs, _ in loader:
-                inputs = inputs.to(self.device)
-                logits = self.model(inputs)                     # raw scores
-                probs = torch.softmax(logits, dim=1)            # convert to probabilities
-                all_probs.append(probs.cpu().numpy())
-
-        return np.concatenate(all_probs, axis=0)
