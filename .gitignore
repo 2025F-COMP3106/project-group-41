@@ -43,3 +43,4 @@ database/
 #Allow test_images folder for presentation
 !test_images/
 !test_images/*.jpg
+!test_images/*.csv

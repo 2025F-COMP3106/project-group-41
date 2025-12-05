@@ -1,0 +1,11 @@
+image_id,diagnosis,diagnosis_full,ground_truth,dx_type,age,sex,localization
+ISIC_0024306,nv,Melanocytic nevi,BENIGN,follow_up,45.0,male,trunk
+ISIC_0024307,nv,Melanocytic nevi,BENIGN,follow_up,50.0,male,lower extremity
+ISIC_0024308,nv,Melanocytic nevi,BENIGN,follow_up,55.0,female,trunk
+ISIC_0024309,nv,Melanocytic nevi,BENIGN,follow_up,40.0,male,trunk
+ISIC_0024310,mel,Melanoma,MALIGNANT,histo,60.0,male,chest
+ISIC_0029306,nv,Melanocytic nevi,BENIGN,histo,35.0,female,acral
+ISIC_0029307,nv,Melanocytic nevi,BENIGN,follow_up,50.0,female,trunk
+ISIC_0029308,bkl,Benign keratosis-like lesions,BENIGN,histo,60.0,female,face
+ISIC_0029309,akiec,Actinic keratoses / Bowen's disease,MALIGNANT,histo,80.0,male,face
+ISIC_0029310,nv,Melanocytic nevi,BENIGN,follow_up,40.0,female,foot
