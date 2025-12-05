@@ -1,4 +1,4 @@
-#Makes improting metrics easy
+# Evaluation module - metrics for model performance
 
 from .metrics import calculate_metrics
 

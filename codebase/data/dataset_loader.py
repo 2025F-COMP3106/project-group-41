@@ -8,8 +8,7 @@ from PIL import Image
 from sklearn.model_selection import train_test_split
 from typing import Optional, Tuple
 
-from .augmentation import get_train_transforms
-from .preprocessor import get_val_test_transforms
+from codebase.utils import get_train_transforms, get_val_test_transforms
 
 
 # Constants

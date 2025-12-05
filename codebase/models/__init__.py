@@ -1,4 +1,5 @@
-#Makes improting models easy
+#Export all models for easy importing
+
 from .base_model import BaseModel
 from .neural_networks import ResNetModel
 

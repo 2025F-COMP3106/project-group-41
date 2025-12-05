@@ -1,0 +1,41 @@
+#Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+#Virtual environment
+.venv/
+venv/
+ENV/
+
+#Model checkpoints (large binary files)
+checkpoints/*.pth
+*.pth
+
+#IDE
+.vscode/
+.idea/
+
+#OS files
+.DS_Store
+Thumbs.db
+
+#Jupyter
+.ipynb_checkpoints/
+
+#Logs
+*.log
+
+codebase/data/images/
+codebase/data/HAM10000_images_part_1/
+codebase/data/HAM10000_images_part_2/
+codebase/data/*.csv
+
+#Database folder (full HAM10000 dataset)
+database/
+
+#Image files
+*.jpg
+*.jpeg
+*.png
