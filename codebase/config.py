@@ -7,12 +7,12 @@ class TrainingConfig:
 
     def __init__(
         self,
-        num_epochs: int = 20,
-        learning_rate: float = 1e-4,
+        num_epochs: int = 30,
+        learning_rate: float = 3e-5,
         weight_decay: float = 1e-4,
-        batch_size: int = 32,
+        batch_size: int = 16,
         checkpoint_path: str = "checkpoints/best_model.pth",
-        early_stopping_patience: int = 5,
+        early_stopping_patience: int = 10,
         early_stopping_min_delta: float = 1e-4,
         device: str | None = None,
     ):

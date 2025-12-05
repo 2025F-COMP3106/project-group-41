@@ -1,3 +1,5 @@
+![Cancer-Tron 3000](/Cancer-Tron-300.png)
+
 ## Team Members
 
 - **Sheng Zhang** - Student ID: 101311288
